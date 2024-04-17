@@ -1,7 +1,7 @@
 /**
- * file:    template.c
+ * file:    GameOfLife.c
  * author:  John Doe
- * date:    2024-03-13
+ * date:    2024-04-17
  * version: 1.0
  *
  * brief: A brief description of what the program does.
@@ -18,36 +18,68 @@
 #include <stdio.h>
 
 /* Definitions and Constants */
-#define COLUMNS 10
+#define ROWS 9
+#define COLUMNS 9
 
-/* Function Prototypes */
-
-struct cell { 
+struct cell
+{ 
     int current;
     int future; 
 }; 
 
+/* Function Prototypes */
+void game_init(struct cell board[ROWS][COLUMNS]);
+int countNeighbors(struct cell board[ROWS][COLUMNS], int i, int j);
+void printBoard(struct cell board[ROWS][COLUMNS]);
+
+
+
 /* Main Function */
 int main(void)
 {
-    struct cell board [9] [9] = {0, 0}; 
+    struct cell board[ROWS][COLUMNS];  // Julistetaan Board Array
+    game_init(board);  
+
+    // Esimerkki elävät solut
+    board[1][1].current = 1;
+    board[1][2].current = 1;
+    board[1][3].current = 1;
+    board[5][1].current = 1;
+    board[6][2].current = 1;
+    board[6][3].current = 1;
+
+    printBoard(board);
 }
 
 /* Functions */
-/**
- * brief Example function description.
- *
- * More detailed explanation of what the function does, including any algorithms or
- * computational logic used. This section can also describe the context in which the
- * function should be used.
- *
- * input: param1 Description of the first parameter, including how it's used.
- * input: param2 Description of the second parameter, including how it's used.
- *
- * return: Description of the return value, including possible values and their meanings.
- */
 
+void game_init(struct cell board[ROWS][COLUMNS])
+{
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j = 0; j < COLUMNS; j++)  
+        {
+            board[i][j].current = 0;  // Nollataan koko taulukko
+        }
+    }
 
+}
+
+int countNeighbors(struct cell board[ROWS][COLUMNS], int i, int j)
+{
+
+}
+// Funktiossa käydään kaikki board arrayn solut läpi jotka printataan näkyville
+void printBoard(struct cell board[ROWS][COLUMNS]) {
+    printf("Current state of the board:\n");
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLUMNS; j++) {
+            printf("%d ", board[i][j].current);  // printataan jokaisen solun arvo
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
 /**
  * brief: License Information
  *
