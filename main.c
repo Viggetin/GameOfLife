@@ -1,6 +1,6 @@
 /**
  * file:    GameOfLife.c
- * author:  John Doe
+ * author:  Victor Sten
  * date:    2024-04-17
  * version: 1.0
  *
@@ -18,8 +18,9 @@
 #include <stdio.h>
 
 /* Definitions and Constants */
-#define ROWS 9
-#define COLUMNS 9
+#define ROWS 9+1
+#define COLUMNS 9+1
+#define Generations
 
 struct cell
 { 
@@ -29,8 +30,10 @@ struct cell
 
 /* Function Prototypes */
 void game_init(struct cell board[ROWS][COLUMNS]);
-int countNeighbors(struct cell board[ROWS][COLUMNS], int i, int j);
+int countNeighbors(struct cell board[ROWS][COLUMNS], int r, int c);
 void printBoard(struct cell board[ROWS][COLUMNS]);
+void updateBoard(struct cell board[ROWS][COLUMNS]);
+void calculateSim(struct cell board[ROWS][COLUMNS]);
 
 
 
@@ -38,36 +41,95 @@ void printBoard(struct cell board[ROWS][COLUMNS]);
 int main(void)
 {
     struct cell board[ROWS][COLUMNS];  // Julistetaan Board Array
-    game_init(board);  
+    int x = 0;
 
-    // Esimerkki elävät solut
-    board[1][1].current = 1;
-    board[1][2].current = 1;
-    board[1][3].current = 1;
-    board[5][1].current = 1;
-    board[6][2].current = 1;
-    board[6][3].current = 1;
-
+    game_init(board);
     printBoard(board);
+    while(x < 10)
+    {
+        calculateSim(board);
+        printBoard(board);
+        x++;
+    }
+    return 0;
 }
 
 /* Functions */
 
 void game_init(struct cell board[ROWS][COLUMNS])
 {
+    //Nollataan board.Current
     for(int i = 0; i < ROWS; i++)
     {
         for(int j = 0; j < COLUMNS; j++)  
         {
             board[i][j].current = 0;  // Nollataan koko taulukko
+            board[i][j].future = 0;
         }
     }
+    
+    // Esimerkki elävät solut
+    board[2][2].current = 1;
+    board[2][3].current = 1;
+    board[1][4].current = 1;
+    board[2][5].current = 1;
+    board[2][6].current = 1;
+    board[3][3].current = 1;
+    board[3][5].current = 1;
+    board[4][4].current = 1;
 
 }
 
-int countNeighbors(struct cell board[ROWS][COLUMNS], int i, int j)
+void calculateSim(struct cell board[ROWS][COLUMNS])
 {
-
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLUMNS; j++) {
+        int count = countNeighbors(board, i, j);
+        if (board[i][j].current == 1) // Cell is currently alive
+            {  
+                if(count < 2 || count > 3)
+                {
+                    board[i][j].future = 0;
+                }
+                else
+                {
+                    board[i][j].future = 1;
+                }
+            }
+                else
+            {
+                if(count == 3)
+                {
+                    board[i][j].future = 1;
+                }
+                else
+                {
+                    board[i][j].future = 0;
+                }
+            }
+        }
+    }
+    updateBoard(board);
+}
+int countNeighbors(struct cell board[ROWS][COLUMNS], int r, int c)
+{
+    int count = 0;
+    
+    for (int i = r - 1; i <= r + 1; i++) 
+    {
+        for (int j = c - 1; j <= c + 1; j++) 
+        {
+            // Continue if it's the cell itself
+            if (i == r && j == c)
+                continue;
+            // Count if the neighboring cell is 1
+            if (board[i][j].current == 1)
+            {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 // Funktiossa käydään kaikki board arrayn solut läpi jotka printataan näkyville
 void printBoard(struct cell board[ROWS][COLUMNS]) {
@@ -79,6 +141,15 @@ void printBoard(struct cell board[ROWS][COLUMNS]) {
         printf("\n");
     }
     printf("\n");
+}
+
+void updateBoard(struct cell board[ROWS][COLUMNS])
+{
+    for (int r = 0; r < ROWS; r++) {
+        for (int c = 0; c < COLUMNS; c++) {
+            board[r][c].current = board[r][c].future;
+        }
+    }
 }
 /**
  * brief: License Information
