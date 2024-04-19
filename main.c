@@ -16,6 +16,7 @@
 
 /* Includes */
 #include <stdio.h>
+#include <ncurses.h>
 
 /* Main Function */
 int main(void)
