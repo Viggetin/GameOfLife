@@ -15,23 +15,46 @@
  */
 
 /* Includes */
-#include <stdio.h>
-#include <ncurses.h>
+#include "header.h"
 
-/* Main Function */
 int main(void)
 {
-    struct cell board[ROWS][COLUMNS];  // Julistetaan Board
-    int x = 0;
+    struct cell board[ROWS][COLUMNS];
+    int ch;  
+
+    // Aloitetaan Ncurses
+    initscr();
+    cbreak();           
+    noecho();           
+    nodelay(stdscr, TRUE);
+    keypad(stdscr, TRUE);
+
+    start_color();
+    init_pair(1,COLOR_RED,COLOR_BLUE);
+    
+    WINDOW *win = newwin(100,100,10,60);
+    //box(win, 0, 0);
+    refresh();
 
     game_init(board);
-    printBoard(board);
-    while(x < 10)
+    printBoard(win,board);
+
+    // Jatketaan peliä kunnes painetaan 'z'
+    while((ch = getch()) != 'z')
     {
-        calculateSim(board);
-        printBoard(board);
-        x++;
+        if (ch == ERR)
+        {
+            calculateSim(board);
+            printBoard(win,board);
+            //päivitetään näyttöä viiveellä
+            sleep(1);
+            wrefresh(win);
+        }
     }
+
+    // lopetetaan Ncurses
+    endwin();
+
     return 0;
 }
 

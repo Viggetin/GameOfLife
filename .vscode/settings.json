@@ -2,6 +2,7 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "header.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "ncurses.h": "c"
     }
 }

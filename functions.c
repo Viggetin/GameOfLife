@@ -1,5 +1,6 @@
+//Includes
+
 #include "header.h"
-#include <stdio.h>
 
 /* Functions */
 /**
@@ -11,9 +12,15 @@
  * 
  * Funktiossa asetetaan myös elävät solut jota voi muokata tarvittaessa
  */
-void game_init(struct cell board[ROWS][COLUMNS])
-{
-    //Nollataan board.Current
+
+void game_init(struct cell board[ROWS][COLUMNS]) {
+    FILE *fp;
+    int c, r;
+    char state;
+
+    c = 0;
+    r = 0;
+
     for(int i = 0; i < ROWS; i++)
     {
         for(int j = 0; j < COLUMNS; j++)  
@@ -22,18 +29,34 @@ void game_init(struct cell board[ROWS][COLUMNS])
             board[i][j].future = 0;
         }
     }
-    
-    // Esimerkki elävät solut
-    board[2][2].current = 1;
-    board[2][3].current = 1;
-    board[1][4].current = 1;
-    board[2][5].current = 1;
-    board[2][6].current = 1;
-    board[3][3].current = 1;
-    board[3][5].current = 1;
-    board[4][4].current = 1;
+
+    fp = fopen("game.txt", "r");
+    if (fp == NULL) {
+        perror("Failed to open game.txt");
+        return;  // Exit the function if file cannot be opened
+    }
+
+    while (r < ROWS && fscanf(fp, "%c", &state) == 1) {
+        if (state == '\n') {
+            r++;
+            c = 0;
+            continue;  // Skip to the next row on encountering a newline
+        }
+        if (state == '0' || state == '1') {
+            board[r][c].current = state - '0';  // Convert character '0' or '1' to integer 0 or 1
+            c++;
+        }
+
+        if (c >= COLUMNS && state != '\n') {
+            r++;
+            c = 0;
+        }
+    }
+
+    fclose(fp);
 
 }
+
 /**
  * Lyhyt selitys ohjelman toiminnasta
  *
@@ -111,16 +134,21 @@ int countNeighbors(struct cell board[ROWS][COLUMNS], int r, int c)
  *
  * Funktiossa printataan nykyinen voimassa oleva taulu esille terminaaliin
  */
-void printBoard(struct cell board[ROWS][COLUMNS]) {
-    printf("Current state of the board:\n");
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLUMNS; j++) {
-            printf("%d ", board[i][j].current);  // printataan jokaisen solun arvo
+
+void printBoard(WINDOW * w,struct cell board[ROWS][COLUMNS]) {
+    clear();  // Clear the screen
+    wmove(w,1,1);
+    
+    for (int i = 1; i < ROWS-1; i++) {
+        for (int j = 1; j < COLUMNS-1; j++) {
+            attron(COLOR_PAIR(1));
+            
+            mvwprintw(w,i, j * 2, "%d", board[i][j].current);
         }
-        printf("\n");
     }
-    printf("\n");
+    wrefresh(w);
 }
+
 /**
  * Lyhyt selitys ohjelman toiminnasta
  *
