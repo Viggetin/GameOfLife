@@ -13,7 +13,9 @@
  * Funktiossa asetetaan myös elävät solut jota voi muokata tarvittaessa
  */
 
-void game_init(struct cell board[ROWS][COLUMNS]) {
+void game_init(struct cell board[ROWS][COLUMNS])
+{
+
     FILE *fp;
     int c, r;
     char state;
@@ -135,19 +137,19 @@ int countNeighbors(struct cell board[ROWS][COLUMNS], int r, int c)
  * Funktiossa printataan nykyinen voimassa oleva taulu esille terminaaliin
  */
 
-void printBoard(WINDOW * w,struct cell board[ROWS][COLUMNS]) {
-    clear();  // Clear the screen
-    wmove(w,1,1);
-    
+void printBoard(WINDOW *w, struct cell board[ROWS][COLUMNS]) {
+    werase(w);  // Clear the specific window, not the entire screen
     for (int i = 1; i < ROWS-1; i++) {
         for (int j = 1; j < COLUMNS-1; j++) {
-            attron(COLOR_PAIR(1));
-            
-            mvwprintw(w,i, j * 2, "%d", board[i][j].current);
+            wattron(w, COLOR_PAIR(1));
+            mvwprintw(w, i, j * 2, "%d", board[i][j].current);
+            wattroff(w, COLOR_PAIR(1));
         }
     }
-    wrefresh(w);
+    box(w, 0, 0); // Redraw box if needed
+    wrefresh(w);  // Refresh only the game window
 }
+
 
 /**
  * Lyhyt selitys ohjelman toiminnasta

@@ -17,46 +17,73 @@
 /* Includes */
 #include "header.h"
 
-int main(void)
-{
-    struct cell board[ROWS][COLUMNS];
-    int ch;  
+int main(void) {
+    struct cell board[ROWS][COLUMNS] = {{0}};
+    int ch;
+    int i = 0;
+    char list[3][50] = { "Start the Game (E)", "Pause the Game (P)", "Exit the Program (Z)" };
 
-    // Aloitetaan Ncurses
     initscr();
-    cbreak();           
-    noecho();           
-    nodelay(stdscr, TRUE);
+    cbreak();
+    noecho();
+    curs_set(0);
     keypad(stdscr, TRUE);
 
-    start_color();
-    init_pair(1,COLOR_RED,COLOR_BLUE);
+    WINDOW *win = newwin(100, 100, 10, 60);
+    WINDOW *menu = newwin(7, 55, 2, 15);
+    keypad(menu, TRUE);
     
-    WINDOW *win = newwin(100,100,10,60);
-    //box(win, 0, 0);
-    refresh();
-
     game_init(board);
-    printBoard(win,board);
+    bool running = false;
 
-    // Jatketaan peliä kunnes painetaan 'z'
-    while((ch = getch()) != 'z')
-    {
-        if (ch == ERR)
-        {
-            calculateSim(board);
-            printBoard(win,board);
-            //päivitetään näyttöä viiveellä
-            sleep(1);
-            wrefresh(win);
+    while (1) {
+        wclear(menu);
+        mvwprintw(menu, 1, 2, "Welcome to the Game Of Life!");
+        box(menu, 0, 0);
+        refresh();
+        wrefresh(menu);
+
+        for (int j = 0; j < 3; j++) {
+            if (j == i)
+                wattron(menu, A_STANDOUT);
+            else
+                wattroff(menu, A_STANDOUT);
+            mvwprintw(menu, j + 2, 2, "%s", list[j]);
+        }
+        wrefresh(menu);
+
+        ch = wgetch(menu);
+        move(0,20);
+        printw("<%03d>", ch);
+        switch (ch) {
+            case 'e':  // Start the game
+                wclear(win);
+                nodelay(win, TRUE);
+                running = true;
+                while (running) {
+                    ch = wgetch(win);
+                    if (ch == 'z' || ch == 'p') {
+                        running = false;
+                    }
+                    calculateSim(board);
+                    printBoard(win, board);
+                    wrefresh(win);
+                    sleep(1);
+                }
+                flushinp();  // Clear input buffer
+                break;
+            case 'P':  // Pause the game
+                nodelay(win, FALSE);
+                break;
+            case 'Z':  // Exit the program
+                delwin(menu);
+                delwin(win);
+                endwin();
+                return 0;
         }
     }
-
-    // lopetetaan Ncurses
-    endwin();
-
-    return 0;
 }
+
 
 /**
  * brief: License Information
