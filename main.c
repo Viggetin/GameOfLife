@@ -23,17 +23,24 @@ int main(void) {
     int i = 0;
     char list[3][50] = { "Start the Game (E)", "Pause the Game (P)", "Exit the Program (Z)" };
 
+    game_init(board);
+
     initscr();
     cbreak();
     noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
 
-    WINDOW *win = newwin(100, 100, 10, 60);
+    start_color();
+    init_pair(Creature_pair,COLOR_BLUE,COLOR_BLUE);
+    init_pair(ground, COLOR_GREEN, COLOR_GREEN);
+    init_pair(River, COLOR_WHITE, COLOR_BLUE);
+    init_pair(Mountain, COLOR_WHITE, COLOR_GREEN);
+
+    WINDOW *win = newwin(50, 100, 10, 60);
     WINDOW *menu = newwin(7, 55, 2, 15);
     keypad(menu, TRUE);
     
-    game_init(board);
     bool running = false;
 
     while (1) {
@@ -43,7 +50,8 @@ int main(void) {
         refresh();
         wrefresh(menu);
 
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < 3; j++)
+        {
             if (j == i)
                 wattron(menu, A_STANDOUT);
             else
@@ -60,7 +68,8 @@ int main(void) {
                 wclear(win);
                 nodelay(win, TRUE);
                 running = true;
-                while (running) {
+                while (running)
+                {
                     ch = wgetch(win);
                     if (ch == 'z' || ch == 'p') {
                         running = false;
@@ -70,12 +79,11 @@ int main(void) {
                     wrefresh(win);
                     sleep(1);
                 }
-                flushinp();  // Clear input buffer
                 break;
-            case 'P':  // Pause the game
+            case 'p':  // Pause the game
                 nodelay(win, FALSE);
                 break;
-            case 'Z':  // Exit the program
+            case 'z':  // Exit the program
                 delwin(menu);
                 delwin(win);
                 endwin();

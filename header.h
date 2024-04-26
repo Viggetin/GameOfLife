@@ -10,12 +10,17 @@
 #define ROWS 50+2
 #define COLUMNS 50+2
 #define Generations
-#define Creature 1;
+#define ground 1
+#define Creature_pair 5
+#define River 2
+#define Mountain 3
 struct cell
-{ 
+{
     int current;
-    int future; 
-}; 
+    int future;
+    char type; // 'N' for normal, 'W' for water/river, '^' for mountain
+};
+
 
 /* Function Prototypes */
 void game_init(struct cell board[ROWS][COLUMNS]);
