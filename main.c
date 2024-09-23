@@ -1,55 +1,68 @@
-/**
- * file:    GameOfLife.c
- * author:  Victor Sten
- * date:    2024-04-17
- * version: 1.0
+/*!
+ * \file GameOfLife.c
+ * \author Victor Sten
+ * \date 2024-04-17
+ * \version 1.0
  *
- * brief: A brief description of what the program does.
+ * \brief Ohjelma simuloi kaksintaistelua ihmisten ja örkkien välillä kartalla, jossa on vuoria, jokia ja seinämäalueita.
+ * 
+ * Ohjelmassa käytetään hyväksi Ncurses kirjastoa jolla luodaan pelin visuaalinen puoli.
  *
- * Detailed description of the program. This program is designed to 
- * demonstrate modern C programming practices, including structured 
- * documentation, use of constants, function prototypes, and 
- * basic program structure.
- *
- * This software is released under the GPL License.
+ * \note This software is released under the GPL License.
  */
 
 /* Includes */
 #include "header.h"
 
+/*!
+ * \brief Main function.
+ *
+ * \return Return 0 on success.
+ */
 int main(void) {
+    // Luodaan pelilauta ja alustetaan se tyhjillä soluilla
     struct cell board[ROWS][COLUMNS] = {{0}};
     int ch;
     int i = 0;
+    // Luodaan valikkovaihtoehdot
     char list[3][50] = { "Start the Game (E)", "Pause the Game (P)", "Exit the Program (Z)" };
 
+    // Alustetaan peli avaamalla pelilaudan tiedosto ja asettamalla pelilaudan alkutila
     game_init(board);
 
+    // Alustetaan ncurses-kirjasto
     initscr();
     cbreak();
     noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
 
+    // Alustetaan värejä
     start_color();
-    init_pair(Creature_pair,COLOR_BLUE,COLOR_BLUE);
+    init_pair(Human_pair,COLOR_BLUE,COLOR_BLUE);
     init_pair(ground, COLOR_GREEN, COLOR_GREEN);
     init_pair(River, COLOR_WHITE, COLOR_BLUE);
-    init_pair(Mountain, COLOR_WHITE, COLOR_GREEN);
+    init_pair(Mountain, COLOR_WHITE, COLOR_BLACK);
+    init_pair(Gray, COLOR_WHITE, COLOR_WHITE);
+    init_pair(Orc_pair, COLOR_RED, COLOR_RED);
 
+    // Luodaan peli-ikkuna ja valikko-ikkuna
     WINDOW *win = newwin(50, 100, 10, 60);
-    WINDOW *menu = newwin(7, 55, 2, 15);
+    WINDOW *menu = newwin(10, 55, 2, 15);
     keypad(menu, TRUE);
     
     bool running = false;
 
+    // Pääsilmukka
     while (1) {
+        // Päivitetään valikko
         wclear(menu);
         mvwprintw(menu, 1, 2, "Welcome to the Game Of Life!");
         box(menu, 0, 0);
         refresh();
         wrefresh(menu);
 
+        // Tulostetaan valikkovaihtoehdot
         for (int j = 0; j < 3; j++)
         {
             if (j == i)
@@ -58,13 +71,20 @@ int main(void) {
                 wattroff(menu, A_STANDOUT);
             mvwprintw(menu, j + 2, 2, "%s", list[j]);
         }
+
+        // Näytetään pelaajien värit
+        mvwprintw(menu, 6, 2, "Blue army is Humans");
+        mvwprintw(menu, 7, 2, "Red army is Orcs");
+
         wrefresh(menu);
 
+        // Odottaa pelaajan valintaa
         ch = wgetch(menu);
         move(0,20);
         printw("<%03d>", ch);
+        // Käsitellään pelaajan valinta
         switch (ch) {
-            case 'e':  // Start the game
+            case 'e':  // Aloita peli
                 wclear(win);
                 nodelay(win, TRUE);
                 running = true;
@@ -80,10 +100,10 @@ int main(void) {
                     sleep(1);
                 }
                 break;
-            case 'p':  // Pause the game
+            case 'p':  // Keskeytä peli
                 nodelay(win, FALSE);
                 break;
-            case 'z':  // Exit the program
+            case 'z':  // Poistu ohjelmasta
                 delwin(menu);
                 delwin(win);
                 endwin();
@@ -92,9 +112,8 @@ int main(void) {
     }
 }
 
-
-/**
- * brief: License Information
+/*!
+ * \brief License Information.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
