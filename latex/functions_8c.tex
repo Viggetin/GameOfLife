@@ -1,0 +1,95 @@
+\doxysection{functions.\+c File Reference}
+\hypertarget{functions_8c}{}\label{functions_8c}\index{functions.c@{functions.c}}
+
+
+Tämä tiedosto sisältää ohjelman tarvittavat funktiot.  
+
+
+{\ttfamily \#include "{}header.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__prototypes_ga291baaebdcea3ec1c84fddd3c6faefa1}{game\+\_\+init}} (struct \mbox{\hyperlink{structcell}{cell}} board\mbox{[}\mbox{\hyperlink{group__definitions_ga3cfd3aa62338d12609f6d65bce97e9cd}{ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{group__definitions_ga06c6c391fc11d106e9909f0401b255b1}{COLUMNS}}\mbox{]})
+\item 
+void \mbox{\hyperlink{group__prototypes_ga9a48236cd8a89a28905af1d586dbd68c}{calculate\+Sim}} (struct \mbox{\hyperlink{structcell}{cell}} board\mbox{[}\mbox{\hyperlink{group__definitions_ga3cfd3aa62338d12609f6d65bce97e9cd}{ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{group__definitions_ga06c6c391fc11d106e9909f0401b255b1}{COLUMNS}}\mbox{]})
+\item 
+void \mbox{\hyperlink{functions_8c_a3bb6095f3f8705c8dd697fb593cc6b8b}{count\+Neighbors}} (struct \mbox{\hyperlink{structcell}{cell}} board\mbox{[}\mbox{\hyperlink{group__definitions_ga3cfd3aa62338d12609f6d65bce97e9cd}{ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{group__definitions_ga06c6c391fc11d106e9909f0401b255b1}{COLUMNS}}\mbox{]}, int r, int c, int \texorpdfstring{$\ast$}{*}human\+Count, int \texorpdfstring{$\ast$}{*}orc\+Count, bool \texorpdfstring{$\ast$}{*}adjacent\+Enemy)
+\item 
+void \mbox{\hyperlink{group__prototypes_gab3dc5fe1f2db621fb389eece66b949f0}{print\+Board}} (WINDOW \texorpdfstring{$\ast$}{*}w, struct \mbox{\hyperlink{structcell}{cell}} board\mbox{[}\mbox{\hyperlink{group__definitions_ga3cfd3aa62338d12609f6d65bce97e9cd}{ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{group__definitions_ga06c6c391fc11d106e9909f0401b255b1}{COLUMNS}}\mbox{]})
+\item 
+void \mbox{\hyperlink{group__prototypes_gaa82e2bc00f552d7f70abae6d03b49e52}{update\+Board}} (struct \mbox{\hyperlink{structcell}{cell}} board\mbox{[}\mbox{\hyperlink{group__definitions_ga3cfd3aa62338d12609f6d65bce97e9cd}{ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{group__definitions_ga06c6c391fc11d106e9909f0401b255b1}{COLUMNS}}\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tämä tiedosto sisältää ohjelman tarvittavat funktiot. 
+
+
+
+Definition in file \mbox{\hyperlink{functions_8c_source}{functions.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{functions_8c_a3bb6095f3f8705c8dd697fb593cc6b8b}\label{functions_8c_a3bb6095f3f8705c8dd697fb593cc6b8b} 
+\index{functions.c@{functions.c}!countNeighbors@{countNeighbors}}
+\index{countNeighbors@{countNeighbors}!functions.c@{functions.c}}
+\doxysubsubsection{\texorpdfstring{countNeighbors()}{countNeighbors()}}
+{\footnotesize\ttfamily void count\+Neighbors (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcell}{cell}}}]{board\mbox{[}\+ROWS\mbox{]}\mbox{[}\+COLUMNS\mbox{]},  }\item[{int}]{r,  }\item[{int}]{c,  }\item[{int \texorpdfstring{$\ast$}{*}}]{human\+Count,  }\item[{int \texorpdfstring{$\ast$}{*}}]{orc\+Count,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{adjacent\+Enemy }\end{DoxyParamCaption})}
+
+Laskee tietyn solun ympärillä olevien naapurisolujen määrän ja tarkistaa, onko vieressä vihollissoluja. Tämä funktio laskee tietyn solun ympärillä olevien naapurisolujen määrän ja samalla tarkistaa, onko vieressä vihollissoluja.
+
+Aluksi alustetaan muuttujat human\+Count, orc\+Count ja adjacent\+Enemy. Käydään läpi solun ympärillä olevat solut käyttämällä kaksiulotteista silmukkaa. Tarkistetaan, että käsiteltävä solu ei ole itse solu, jota tarkastellaan, ja että se ei ole laudan reunalla tai este (vuori, vesi tai seinä). Jos naapuri on ihminen, lisätään human\+Count-\/muuttujan arvoa yhdellä tai jos naapuri on örkki, lisätään orc\+Count-\/muuttujan arvoa yhdellä.
+
+Tarkistetaan myös, onko naapurisolussa vihollissolu. Jos solun vieressä on vihollissolu, asetetaan adjacent\+Enemy-\/\+Booleani arvoksi true. Tämän toiminnan jälkeen human\+Count ja orc\+Count sisältävät ihmis-\/ ja örkkinäkyvien solujen määrän, ja adjacent\+Enemy kertoo, onko tarkasteltavan solun vieressä vihollissoluja. Näitä tietoja käytetään edelleen pelin simulaatiossa, kun päätetään solun tuleva tila.
+
+
+\begin{DoxyParams}{Parameters}
+{\em board} & Pelilauta, jossa solut sijaitsevat. \\
+\hline
+{\em r} & Solun rivi-\/indeksi. \\
+\hline
+{\em c} & Solun sarakkeen indeksi. \\
+\hline
+{\em human\+Count} & Ihmisten määrä solun ympärillä (tulos). \\
+\hline
+{\em orc\+Count} & Örkkien määrä solun ympärillä (tulos). \\
+\hline
+{\em adjacent\+Enemy} & Onko solun vieressä vihollissoluja (tulos). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{functions_8c_source_l00214}{214}} of file \mbox{\hyperlink{functions_8c_source}{functions.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{//\ Alustetaan\ laskurit\ ja\ adjacentEnemy}}
+\DoxyCodeLine{00216\ \ \ \ \ *humanCount\ =\ 0;}
+\DoxyCodeLine{00217\ \ \ \ \ *orcCount\ =\ 0;}
+\DoxyCodeLine{00218\ \ \ \ \ *adjacentEnemy\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{00219\ \ \ \ \ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{//\ Käydään\ läpi\ solun\ ympärillä\ olevat\ solut}}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ r\ -\/\ 1;\ i\ <=\ r\ +\ 1;\ i++)\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\ =\ c\ -\/\ 1;\ j\ <=\ c\ +\ 1;\ j++)\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tarkistetaan,\ että\ solu\ ei\ ole\ itse\ solu\ ja\ että\ se\ ei\ ole\ laudan\ reunalla\ tai\ este}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((i\ ==\ r\ \&\&\ j\ ==\ c)\ ||\ i\ <\ 0\ ||\ j\ <\ 0\ ||\ i\ >=\ \mbox{\hyperlink{group__definitions_ga3cfd3aa62338d12609f6d65bce97e9cd}{ROWS}}\ ||\ j\ >=\ \mbox{\hyperlink{group__definitions_ga06c6c391fc11d106e9909f0401b255b1}{COLUMNS}}\ ||}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ board[i][j].type\ ==\ \textcolor{charliteral}{'W'}\ ||\ board[i][j].type\ ==\ \textcolor{charliteral}{'\string^'}\ ||\ board[i][j].type\ ==\ \textcolor{charliteral}{'@'})\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lisätään\ ihmisten\ ja\ örkkien\ määrää}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (board[i][j].current\ ==\ 1)\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*humanCount)++;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (board[i][j].current\ ==\ 2)\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*orcCount)++;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tarkistetaan\ vihollisten\ läheisyys}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((board[r][c].current\ ==\ 1\ \&\&\ board[i][j].current\ ==\ 2)\ ||\ (board[r][c].current\ ==\ 2\ \&\&\ board[i][j].current\ ==\ 1))\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *adjacentEnemy\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ \}}
+
+\end{DoxyCode}
