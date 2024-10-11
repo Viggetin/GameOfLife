@@ -51,7 +51,7 @@ struct cell
  * @{
  */
 void game_init(struct cell board[ROWS][COLUMNS]);
-void countNeighbors(struct cell board[ROWS][COLUMNS], int r, int c, int* humanCount, int* orcCount);
+void countNeighbors(struct cell board[ROWS][COLUMNS], int r, int c, int* humanCount, int* orcCount, bool* adjacentEnemy);
 void printBoard(WINDOW *w, struct cell board[ROWS][COLUMNS]);
 void updateBoard(struct cell board[ROWS][COLUMNS]);
 void calculateSim(struct cell board[ROWS][COLUMNS]);

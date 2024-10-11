@@ -48,7 +48,7 @@ int main(void) {
 
     // Luodaan peli-ikkuna ja valikko-ikkuna
     WINDOW *win = newwin(50, 100, 10, 60);
-    WINDOW *menu = newwin(10, 55, 2, 15);
+    WINDOW *menu = newwin(12, 47, 2, 15);
     keypad(menu, TRUE);
     
     bool running = false;
@@ -57,7 +57,7 @@ int main(void) {
     while (1) {
         // Päivitetään valikko
         wclear(menu);
-        mvwprintw(menu, 1, 2, "Welcome to the Game Of Life!");
+        mvwprintw(menu, 1, 2, "Welcome to the Battle of the Pelennor Fields!");
         box(menu, 0, 0);
         refresh();
         wrefresh(menu);
@@ -75,7 +75,9 @@ int main(void) {
         // Näytetään pelaajien värit
         mvwprintw(menu, 6, 2, "Blue army is Humans");
         mvwprintw(menu, 7, 2, "Red army is Orcs");
-
+        mvwprintw(menu, 8, 2, "White tiles are walls");
+        mvwprintw(menu, 9, 2, "Blue tiles are water/river");
+        mvwprintw(menu, 10, 2, "^ are Mountains");
         wrefresh(menu);
 
         // Odottaa pelaajan valintaa
@@ -97,7 +99,7 @@ int main(void) {
                     calculateSim(board);
                     printBoard(win, board);
                     wrefresh(win);
-                    sleep(1);
+                    sleep(1); 
                 }
                 break;
             case 'p':  // Keskeytä peli
