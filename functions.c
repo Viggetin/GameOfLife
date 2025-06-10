@@ -201,7 +201,7 @@ void calculateSim(struct cell board[ROWS][COLUMNS]) {
 *
 * Tarkistetaan myös, onko naapurisolussa vihollissolu. Jos solun vieressä on vihollissolu, asetetaan adjacentEnemy-Booleani arvoksi true.
 * Tämän toiminnan jälkeen humanCount ja orcCount sisältävät ihmis- ja örkkinäkyvien solujen määrän, ja adjacentEnemy kertoo, onko tarkasteltavan solun vieressä vihollissoluja.
-*Näitä tietoja käytetään edelleen pelin simulaatiossa, kun päätetään solun tuleva tila.
+* Näitä tietoja käytetään edelleen pelin simulaatiossa, kun päätetään solun tuleva tila.
 *
 * @param board Pelilauta, jossa solut sijaitsevat.
 * @param r Solun rivi-indeksi.
